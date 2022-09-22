@@ -47,7 +47,7 @@ scheam: [
       className: {}, // el-form-item添加class类名
       style: {}, // el-form-item 添加style样式
       nameSlots: {}, // el-form-item 添加具名插槽，需要自定义label时
-      isTagcomponents: false // 是否为占位组件
+      isTagComponent: false // 是否为占位组件
     },
     children: []
   }
@@ -148,7 +148,7 @@ formProperty: {
 ```
 ### 注入自定义组件
 ```
-我们的渲染器底层使用的是Vue的render函数去渲染的，绝大多数情况下渲染的都是全局组件，但是全局组件不能满足现有业务的情况下,我们提供了注入自定义组件的入口，即injectComponent属性，此属性接收需要使用的自定义组件，使用时，我们需要customComponentIndex参数告知我们自定义组件所需的参数以及注入位置
+我们的渲染器底层使用的是Vue的render函数去渲染的，绝大多数情况下渲染的都是全局组件，但是全局组件不能满足现有业务的情况下,我们提供了注入自定义组件的入口，即injectComponent属性，此属性接收需要使用的自定义组件，使用时，我们需要customComponentSub参数告知我们自定义组件所需的参数以及注入位置
 ```
 
 ### 参数说明

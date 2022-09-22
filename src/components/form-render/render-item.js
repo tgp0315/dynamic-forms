@@ -1,10 +1,10 @@
 import Vue from "vue";
 import {
-  processingNameSlots,
+  processingNameSlot,
   processingEnum,
   // getValue,
-  bindEventsMap,
-  parseExpression,
+  bindEvent,
+  parseExpressions,
 } from "./utils";
 
 export default Vue.component("render-item", {
@@ -36,8 +36,8 @@ export default Vue.component("render-item", {
   render(h) {
     let that = this;
     // 表达式应该是仅限 显示隐藏 组件属性 标签属性等 不包括插槽
-    parseExpression.bind(this)(this.item, this.expressionMap);
-    const createRenderInstance = (h, conf) => {
+    parseExpressions.bind(this)(this.item, this.expressionMap);
+    const renderInstance = (h, conf) => {
       const {
         // formatter是注册在外部的组件
         tag,
@@ -61,8 +61,8 @@ export default Vue.component("render-item", {
         enums,
       } = conf || {};
       // 事件处理 原生事件与组件的事件
-      let onMap = bindEventsMap.bind(this)(on) || {};
-      let nativeOnMap = bindEventsMap.bind(this)(nativeOn) || {};
+      let onMap = bindEvent.bind(this)(on) || {};
+      let nativeOnMap = bindEvent.bind(this)(nativeOn) || {};
       // 组件属性集合
       // 增加原生事件
       const componentData = {
@@ -115,11 +115,11 @@ export default Vue.component("render-item", {
         });
 
       // 全局属性的添加处理
-      this.globalPropertiesPro(componentData, key);
+      this.globalProps(componentData, key);
 
       // 处理子节点
       const childeNode = children.length
-        ? children.map((ele) => createRenderInstance(h, ele))
+        ? children.map((ele) => renderInstance(h, ele))
         : [];
 
       // 处理枚举
@@ -127,7 +127,7 @@ export default Vue.component("render-item", {
       enumNode = enums ? processingEnum.bind(this)(h, tag, enums) : [];
       // 处理具名插槽
       const nameSlotsList =
-        processingNameSlots.bind(that)(h, nameSlots, conf) || [];
+        processingNameSlot.bind(that)(h, nameSlots, conf) || [];
       // 生成节点
       const node = h(tag, componentData, [
         ...nameSlotsList,
@@ -140,11 +140,11 @@ export default Vue.component("render-item", {
           : h(formatter)
         : node;
     };
-    return createRenderInstance(h, this.item);
+    return renderInstance(h, this.item);
   },
   methods: {
     // 全局的Prop处理
-    globalPropertiesPro(componentData, key) {
+    globalProps(componentData, key) {
       if (!Object.keys(this.options).length) {
         return;
       }

@@ -140,7 +140,7 @@ export default {
             },
           ],
         },
-        { formItem: { isTagComponents: true, visible: true } },
+        { formItem: { isTagComponent: true, visible: true } },
         {
           formItem: {
             span: 6,

@@ -1,4 +1,4 @@
-import { processingNameSlots, parseExpression, bindEventsMap } from "./utils";
+import { processingNameSlot, parseExpressions, bindEvent } from "./utils";
 export default {
   inject: ["options", "scheam", "injectComponent", "context"],
   props: {
@@ -22,12 +22,12 @@ export default {
     },
   },
   computed: {
-    computedRestSpanInRows() {
+    restSpanInRows() {
       // 如果不是占位组件就不走下面
-      // if (!this.item.isTagComponents) {
+      // if (!this.item.isTagComponent) {
       //   return 0;
       // }
-      const excludeKeyList = ["isTagComponents", "customComponentIndex"];
+      const excludeKeyList = ["isTagComponent", "customComponentSub"];
       const list =
         this.scheam
           .slice(0, this.index)
@@ -48,13 +48,13 @@ export default {
           isFormatter: !!ele.formItem.formatter,
         };
       });
-      const isLastFormatterIndex = visibleList.lastIndexOf(
+      const isLastFormatterSub = visibleList.lastIndexOf(
         (ele) => ele.isFormatter
       );
       // 如果是分隔栏或者其他自定义的组件，那么前面的就统统计算成24的倍数，防止后面计算错误
-      if (isLastFormatterIndex > -1) {
+      if (isLastFormatterSub > -1) {
         visibleList.forEach((ele, i) => {
-          if (i <= isLastFormatterIndex) {
+          if (i <= isLastFormatterSub) {
             ele.span = 24;
           }
         });
@@ -73,8 +73,8 @@ export default {
     };
   },
   render(h) {
-    // this.parseExpression()
-    parseExpression.bind(this)(this.item, this.expressionMap);
+    // this.parseExpressions()
+    parseExpressions.bind(this)(this.item, this.expressionMap);
     const { layout = {} } = this.options || {};
     let ColClassName = {};
     if (layout.col && layout.col.className) {
@@ -97,21 +97,21 @@ export default {
       visible = true,
       formatter = null,
       style = {},
-      isTagComponents = false,
+      isTagComponent = false,
     } = this.item || {};
-    if (isTagComponents) {
-      this.$set(this.item, "span", this.computedRestSpanInRows);
+    if (isTagComponent) {
+      this.$set(this.item, "span", this.restSpanInRows);
       this.$set(this.item, "visible", true);
     }
     // 事件处理
-    let onMap = bindEventsMap.bind(this)(on) || {};
+    let onMap = bindEvent.bind(this)(on) || {};
     // el-col的属性处理
     // const colComponentData = {
     //   props: Object.assign(col.props ? {} : col.props,)
     // }
 
     // el-label-click class是具有点击事件的时候添加上去的，
-    const formItemCompoentData = {
+    const formItemComponentsData = {
       props,
       class: className,
       style,
@@ -121,15 +121,15 @@ export default {
       },
     };
     // el-form-item的具名插槽处理
-    const nameSoltsList = processingNameSlots.bind(this)(h, nameSlots);
+    const nameSoltsList = processingNameSlot.bind(this)(h, nameSlots);
 
     // 描述node
-    const descriptionNode = this.createDescriptionNode(h, description);
+    const descriptionNode = this.createNode(h, description);
     // form-item
     const content = h(
       "el-form-item",
       {
-        ...formItemCompoentData,
+        ...formItemComponentsData,
       },
       [
         ...nameSoltsList,
@@ -141,12 +141,12 @@ export default {
       ]
     );
     return visible
-      ? isTagComponents
+      ? isTagComponent
         ? h(
             "el-col",
             {
               props: {
-                span: this.computedRestSpanInRows,
+                span: this.restSpanInRows,
               },
               style: {
                 position: "relative",
@@ -175,7 +175,7 @@ export default {
       : "";
   },
   methods: {
-    createDescriptionNode(h, description = {}) {
+    createNode(h, description = {}) {
       if (!Object.keys(description).length) {
         return "";
       }

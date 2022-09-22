@@ -40,7 +40,7 @@ export default {
           },
         },
         {
-          customComponentIndex: 0,
+          customComponentSub: 0,
         },
         {
           formItem: {
@@ -53,7 +53,7 @@ export default {
             visible: true,
             nameSlots: {
               label: {
-                customComponentIndex: 1,
+                customComponentSub: 1,
               },
             },
           },

@@ -42,7 +42,7 @@ export function parseTypeValue(v) {
  * @param {*} conf 当前配置
  * @return {*}
  */
-export function processingNameSlots(createElement, source = {}, conf) {
+export function processingNameSlot(createElement, source = {}, conf) {
   let target = [];
   if (!Object.keys(source).length) {
     return target;
@@ -53,9 +53,9 @@ export function processingNameSlots(createElement, source = {}, conf) {
       on = {},
       className = {},
       style = {},
-      customComponentIndex = -1,
+      customComponentSub = -1,
     } = res || {};
-    const eventsMap = bindEventsMap.bind(this)(on);
+    const eventsMap = bindEvent.bind(this)(on);
 
     if (typeof value === "function") {
       const v = value.bind(this)(createElement, conf);
@@ -70,8 +70,8 @@ export function processingNameSlots(createElement, source = {}, conf) {
         style,
       });
       target.push(instance);
-    } else if (customComponentIndex > -1) {
-      const { formatter } = this.injectComponent[customComponentIndex];
+    } else if (customComponentSub > -1) {
+      const { formatter } = this.injectComponent[customComponentSub];
       const instance = createElement(
         "div",
         {
@@ -100,7 +100,7 @@ export function processingNameSlots(createElement, source = {}, conf) {
  * @param {*} events
  * @return {*}
  */
-export function bindEventsMap(events) {
+export function bindEvent(events) {
   let res = {};
   if (Object.prototype.toString.call(events) !== "[object Object]") {
     return res;
@@ -248,7 +248,7 @@ const getValue = (key, obj) => {
  * @param {*} [item={}]
  * @param {*} [expressionMap={}]
  */
-export function parseExpression(item = {}, expressionMap = {}) {
+export function parseExpressions(item = {}, expressionMap = {}) {
   // 如果不存在表达式路径就返回
   const { option, expressionKeyList = [] } = item || {};
   if (!expressionKeyList.length) {
@@ -314,7 +314,7 @@ export function parseExpression(item = {}, expressionMap = {}) {
           continue;
         } else {
           // 更新本地的表达式并判断是否合法，不合法则跳过
-          const isPass = setExpressionMap.bind(this)(
+          const isPass = setExpression.bind(this)(
             value,
             text,
             obj,
@@ -339,7 +339,7 @@ export function parseExpression(item = {}, expressionMap = {}) {
 
     // 解析表达式
     if (!text && parseTypeValue(value) === "string") {
-      const isPass = setExpressionMap.bind(this)(
+      const isPass = setExpression.bind(this)(
         value,
         text,
         obj,
@@ -357,10 +357,10 @@ export function parseExpression(item = {}, expressionMap = {}) {
   }
 }
 
-export /*
-存储表达式的值 以k的形式
-*/
-function setExpressionMap(
+/*
+ * 存储表达式的值 以k的形式
+ */
+function setExpression(
   value,
   text,
   obj,

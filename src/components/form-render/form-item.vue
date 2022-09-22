@@ -21,8 +21,8 @@
             ></render-item>
           </form-item>
           <formatter
-            v-else-if="injectComponent[item.customComponentIndex]"
-            :formatter="injectComponent[item.customComponentIndex].formatter"
+            v-else-if="injectComponent[item.customComponentSub]"
+            :formatter="injectComponent[item.customComponentSub].formatter"
             :option="item"
             :model="formData"
             :key="index + 1"
@@ -99,7 +99,7 @@ export default {
     /*
       删除formData中某个key，在修改key的时候有用
     */
-    deletSomeFormDataKey(key) {
+    deleteFormByKey(key) {
       // eslint-disable-next-line no-prototype-builtins
       if (this.formData.hasOwnProperty(key)) {
         delete this.formData[key];
@@ -123,7 +123,7 @@ export default {
     /*
       获取某个FormData的值
     */
-    getFormDataKeyValue(key) {
+    getFormDataByKey(key) {
       return this.formData[key];
     },
     submitForm() {

@@ -51,7 +51,7 @@ export default {
                   width: "80px",
                 },
                 className: "label-class",
-                // customComponentIndex: 0 // 当使用自定义注入组件时，使用customComponentIndex指定自定义注入组件的索引
+                // customComponentSub: 0 // 当使用自定义注入组件时，使用customComponentSub指定自定义注入组件的索引
                 // value: () => <div>实验一下</div> // 当value 为function时，仅渲染function内部的数据，数据可为组件 dom节点   string
               },
             },
